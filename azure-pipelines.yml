@@ -1,4 +1,13 @@
 # ASP.NET Core
+- task: CmdLine@2
+  inputs:
+    script: |
+      mkdir $(Agent.ReleaseDirectory)\docker
+      chmod 777 $(Agent.BuildDirectory)\docker
+- task: CmdLine@2
+  inputs:
+    script: 'docker run --rm -v $(Agent.BuildDirectory):/zap/wrk/:rw -t ictu/zap2docker-weekly zap-baseline.py \-t https://pvo-dev-trunk-loans.mutualvision.net/admin \-l -x governreport.xml -r governreport.html \--hook=/zap/auth_hook.py \-z "auth.loginurl=https://pvo-dev-trunk-loans.mutualvision.net/Admin/Authentication/Login?ReturnUrl=%2fAdmin%2f" \auth.username="mvtadmin" \auth.password="Abc-1234" \auth.username_field="username" \auth.password_field="password" "'
+    workingDirectory: '$(Agent.BuildDirectory)'
 # Build and test ASP.NET Core projects targeting .NET Core.
 # Add steps that run tests, create a NuGet package, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
